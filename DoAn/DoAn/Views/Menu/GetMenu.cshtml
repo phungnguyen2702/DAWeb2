@@ -1,0 +1,47 @@
+﻿@model IEnumerable<DoAn.Models.Category>
+
+<div class="sidebar-wrapper">
+    <div class="logo" style="padding:unset;">
+        <a href="@Url.Action("Index","Home")" class="simple-text">             
+            <img src="~/Images/logo.gif" style="width: 200px; height:50px;" />
+        </a>
+    </div>
+
+    <ul class="nav">
+        @{ 
+            string[] icon = { "pe-7s-note2","pe-7s-phone", "pe-7s-gift", "pe-7s-like",
+                "pe-7s-news-paper", "pe-7s-display2","pe-7s-coffee"};
+            int i = 0;
+        }
+        @foreach (var item in Model)
+        {
+            <li class="active">
+                <a href="@Url.Action("ByCat","Product",new { id = item.CatID})">
+                    <i class="@icon[i % icon.Length]"></i>
+                    <p>@item.CatName</p>
+                </a>
+            </li>
+            i++;
+        }
+
+    </ul>
+    <div class="logo">
+    </div>
+    <ul class="nav">
+        @foreach (var item in ViewBag.Ps)
+        {
+            <li class="active">
+                <a href="@Url.Action("BySpe","Product",new { id = item.ID})">
+                    <i class="@icon[i % icon.Length]"></i>
+                    <p>@item.Specie</p>
+                </a>
+            </li>
+            i++;
+        }
+
+    </ul>
+</div>
+
+
+<div class="sidebar-background" style="background-image: url(/Content/img/cover.jpeg) "></div>
+

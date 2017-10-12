@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="305e2d03c7894bf5be507440e6555194" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="QLBHModel.Category" Width="1.5" PointX="0.75" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBHModel.Country" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBHModel.info_user" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBHModel.OrderDetail" Width="1.5" PointX="5.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBHModel.Order" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBHModel.Product" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBHModel.User" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <AssociationConnector Association="QLBHModel.FK__Products__CatID__22AA2996" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBHModel.FK__info_user__Count__1DE57479" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBHModel.FK__info_user__UserI__1ED998B2" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBHModel.FK__OrderDeta__Order__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBHModel.FK__OrderDeta__ProID__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBHModel.FK__Orders__UserID__36B12243" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="QLBHModel.Comment" Width="1.5" PointX="8.25" PointY="8.75" />
+        <AssociationConnector Association="QLBHModel.FK_comments_pro" />
+        <AssociationConnector Association="QLBHModel.FK_comments_User" />
+        <EntityTypeShape EntityType="QLBHModel.Species" Width="1.5" PointX="0.75" PointY="15.25" />
+        <AssociationConnector Association="QLBHModel.FK_Pro_Spe" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "AddCategory";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section css{
+    <link href="~/Content/ButtonStyle.css" rel="stylesheet" />
+}
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div class="text-center center-block" style="background-color:azure; height:50px;">
+            <label style="font-size:20px;color:blueviolet;line-height:50px;">
+                <b>Thêm Một Danh Mục Sản Phẩm</b>
+            </label>
+        </div>
+
+        <form method="post" action="" id="frmAddCat">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-edit fa-2x"></i>
+                        </span>
+                        <div class="form-group label-floating">
+                            <label class="control-label">Tên Danh Mục</label>
+                            <input name="catname" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center" style="margin-top:30px;">
+                   <div class="form-group">
+                       <button class="btn btn-primary btn-round mystyleAP text-center" type="submit">
+                           <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                           <b>Thêm</b>
+                       </button>
+
+                       <button class="btn btn-info btn-round mystyleA text-center" type="reset"
+                               style="margin-left:20px">
+                           <i class="fa fa-recycle" aria-hidden="true"></i>
+                           <b>Hủy</b>
+                       </button>
+
+                       <a class="btn btn-success btn-round text-center" role="button" href="@Url.Action("IndexAdmin","Admin")"
+                               style="margin-left:20px">
+                           <i class="fa fa-backward" aria-hidden="true"></i>
+                           <b>Quay Lại</b>
+                       </a>
+                   </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section js{
+    <script src="~/Content/Rerister/js/material-bootstrap-wizard.js"></script>
+    <script src="~/Content/Rerister/js/jquery.bootstrap.js" type="text/javascript"></script>
+    <script src="~/Content/Rerister/js/jquery.validate.min.js"></script> 
+    <script type="text/javascript">
+        $('#frmAddCat').validate({
+            rules: {
+                catname: {
+                    required: true
+                },
+            },
+            messages:{
+                catname: {
+                    required: "Nhập Tên Đanh Mục"
+                },
+            }
+        });
+    </script>
+}
+
+
+

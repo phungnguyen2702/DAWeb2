@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "AddCategory";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section css{
+    <link href="~/Content/ButtonStyle.css" rel="stylesheet" />
+    <style type="text/css">
+        .txtatb{
+            padding-top:10px;
+            font-size:16px;
+            margin: 5px;
+            font-weight:bold;
+        }
+        #txtp{
+            padding-top:10px;
+            font-size:16px;
+            margin: 5px;
+            font-weight:bold;
+            color:red;
+        }
+    </style>
+}
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div class="text-center center-block" style="background-color:azure; height:50px;">
+            <label style="font-size:20px;color:blueviolet;line-height:50px;">
+                <b>Biểu Đồ Thể Hiện Hoạt Động Website</b>
+            </label>
+        </div>
+        <h4>Activity <br><small id="chart1"></small></h4>
+        <div id="txttb" class="text-warning text-center txtatb">
+        </div>
+        <div id="chartActivity" class="ct-chart"></div>
+
+        <h6>Legend</h6>
+
+        <span class="label label-info">Apple</span>
+
+        <span class="label" style="color:white;background-color:red">Sam Sung</span>
+
+        <span class="label label-warning">Sony</span>
+        <span class="label" style="color:white;background-color:mediumpurple">HTC</span>
+        <span class="label" style="color:white;background-color:chartreuse">Asus Zenfone</span>
+        <span class="label"  style="color:white;background-color:navy">Khác</span>
+       
+
+        <h4><small>Users Behavior</small></h4>
+        <div class="text-warning text-center txtatb">
+            Biểu Đồ Users Behavior
+        </div>
+        <div id="chartUser" class="ct-chart"></div>
+
+        <h6>Legend</h6>
+
+        <i class="fa fa-circle text-info"></i> User Register
+        @*<i class="fa fa-circle text-warning"></i> Register*@
+        <i class="fa fa-circle text-danger"></i> User Order
+
+
+        <h4><small>Public Preferences</small></h4>
+        <div class="text-warning text-center txtatb">
+            Biểu Đồ Doanh số Bán Hàng
+        </div>
+        <div class="row margin-top">
+
+            <div class="col-md-10 col-md-offset-1">
+
+                <div id="chartPreferences" class="ct-chart"></div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-10 col-md-offset-1">
+
+                <h6>Legend</h6>
+
+                <span class="label label-info">Apple</span>
+
+                <span class="label" style="color:white;background-color:red">Sam Sung</span>
+
+                <span class="label label-warning">Sony</span>
+                <span class="label" style="color:white;background-color:mediumpurple">HTC</span>
+                <span class="label" style="color:white;background-color:chartreuse">Asus Zenfone</span>
+                <span class="label" style="color:white;background-color:navy">Khác</span>
+
+            </div>
+        </div>
+        <div id="txtp" class="text-center">
+
+        </div>
+    </div>
+</div>
+
+@section js{
+    <script src="~/Content/Rerister/js/material-bootstrap-wizard.js"></script>
+    @*<script src="~/Content/Rerister/js/jquery.bootstrap.js" type="text/javascript"></script>
+    <script src="~/Content/Rerister/js/jquery.validate.min.js"></script>*@
+    <script src="~/Scripts/chartist.min.js"></script>
+    <script type="text/javascript">
+        function chartP(yy) {
+            var aj = $.ajax({
+                url: "/Manager/getDataChart",
+                method: 'POST',
+                data:{y : yy} ,
+                datatype: 'json',
+            });
+            aj.done(function (dat) {
+                var data = {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    series: dat.sre,                    
+                };                 
+               
+                var options = {
+                    seriesBarDistance: 10,
+                    axisX: {
+                        showGrid: false
+                    },
+                    height: "245px"
+                };
+
+                var responsiveOptions = [
+                  ['screen and (max-width: 640px)', {
+                      seriesBarDistance: 5,
+                      axisX: {
+                          labelInterpolationFnc: function (value) {                             
+                              return value[0];
+                          }
+                      }
+                  }]
+                ];
+                $('#chart1').text('Biểu Đồ Bán Sản Phẩm Năm ' + yy);
+                Chartist.Line('#chartActivity', data, options, responsiveOptions);
+               
+                $('#txttb').text('Sản Phẩm Bán Nhiều Nhất Trong Năm Là: ' +dat.pn +' '+ dat.ma);
+
+                var dataSales = {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    series: dat.us_q,
+                };
+                
+                var optionsSales = {
+                    lineSmooth: false,
+                    low: 0,
+                    
+                    showArea: true,
+                    height: "245px",
+                    axisX: {
+                        showGrid: false,
+                    },
+                    lineSmooth: Chartist.Interpolation.simple({
+                        divisor: 3
+                    }),
+                    showLine: true,
+                    showPoint: false,
+                };
+
+                var responsiveSales = [
+                  ['screen and (max-width: 640px)', {
+                      axisX: {
+                          labelInterpolationFnc: function (value) {
+                              return value[0];
+                          }
+                      }
+                  }]
+                ];
+                Chartist.Line('#chartUser', dataSales, optionsSales, responsiveSales);
+               
+            });
+            aj.fail(function (jqXHR, status, error) {
+                console.log(jqXHR);
+                ///alert('fail');
+            });
+           
+        }
+        $('chartHours').init(chartP(2016));
+       
+
+
+       
+
+        $.ajax({
+            url: "/Manager/getPercen",
+            method: 'POST',
+            data: { y: 2016 },
+            datatype: 'json',
+        }).done(function (dat) {
+            
+            Chartist.Pie('#chartPreferences', {
+                labels: dat.lbl,
+                series: dat.kq
+            });
+            $('#txtp').text('Sản Phẩm có doanh số Bán Nhiều Nhất Trong Năm Là: ' + dat.na + ' ' + dat.qa.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' VNĐ');
+        });
+      
+    </script>
+}

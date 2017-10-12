@@ -1,0 +1,156 @@
+﻿@using DoAn.Models;
+@model DoAn.Models.info_user
+
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Edit Profile</h4>
+                        @if (ViewBag.sspw != null)
+                        {
+                            <div class="alert alert-info">
+                                <div class="container-fluid">
+                                    <div class="alert-icon">
+                                        <i class="material-icons">info_outline</i>
+                                    </div>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="material-icons">clear</i></span>
+                                    </button>
+                                    <b>Đổi Mật Khẩu Thành Công</b>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="content">
+                        <form action="@Url.Action("ViewProfile")" method="post">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>Company</label>
+                                        <input type="text" class="form-control" placeholder="Company" 
+                                               value="@Model.Company" name="Company">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" placeholder="Username" disabled value="@Model.User.f_Username">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" value="@Model.User.f_Email"
+                                               name="f_Email">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control" placeholder="Company" value="@Model.FirstName"
+                                               name="FirstName">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control" placeholder="Last Name" value="@Model.LastName"
+                                               name="LastName">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" placeholder="Home Address" value="@Model.Address_us"
+                                               name="Address_us">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" class="form-control" placeholder="City" value="@Model.City"
+                                               name="City">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Country</label>
+                                        <input type="text" class="form-control" placeholder="Country" value="@Model.Country1.Country_Name"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Postal Code</label>
+                                        <input type="number" class="form-control" placeholder="ZIP Code"
+                                               value="@Model.User.f_ZipCode" name="zipcode">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>About Me</label>
+                                        <div>
+                                            @Html.Raw(Model.AboutMe)
+                                        </div>
+                                        <textarea rows="5" class="form-control" 
+                                                  value="" name="AboutMe"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-user">
+                    <div class="image">
+                        <img src="~/Content/Rerister/photo-1431578500526-4d9613015464.jpg" alt="backgroud" />
+                    </div>
+                    <div class="content">
+                        <div class="author">
+                            <a href="#">
+                                <img class="avatar border-gray" src="~/Content/img/faces/face-3.jpg" alt="..." />
+
+                                <h4 class="title">
+                                    @Model.FirstName<br />
+                                    <small>@Model.User.f_Username</small>
+                                </h4>
+                            </a>
+                        </div>
+                        <p class="description text-center">
+                            @Model.AboutMe
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="text-center">
+                        <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
+                        <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
+                        <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

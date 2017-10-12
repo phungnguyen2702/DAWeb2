@@ -1,0 +1,176 @@
+﻿@model DoAn.Models.Product
+@using DoAn.Helper
+
+@section css{
+    <link href="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .soluong {
+            font-size: 34px;
+            font-weight: bolder;
+            color: navy;
+            margin-top: 20px;
+        }
+
+        .giaban {
+            font-size: 34px;
+            font-weight: bolder;
+            color: blueviolet;
+        }
+
+        strong {
+            color: rebeccapurple;
+        }
+
+        #cmt-error {
+            color: red !important;
+        }
+    </style>
+}
+@section js{
+
+    <script src="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <script type="text/javascript">
+        $('#txtQ').TouchSpin({
+            verticalbuttons: true,
+            min:1,
+            max: @Model.Quantity,
+        });
+        function btnclick(){
+            if($("#Spe").is(':hidden')){
+                $('#Spe').show();
+                $(this).attr( "title",'Ẩn Đanh Sách');
+            }
+            else{
+                $('#Spe').hide();
+                $(this).attr( "title",'Hiện Đanh Sách');
+            }
+        }
+        function btnclick2(){
+            if($("#SPcat").is(':hidden')){
+                $('#SPcat').show();
+                $(this).attr( "title",'Ẩn Đanh Sách');
+            }
+            else{
+                $('#SPcat').hide();
+                $(this).attr( "title",'Hiện Đanh Sách');
+            }
+               
+        }
+    </script>
+}
+
+@if (Model == null)
+{
+    <text>Sản Phẩm Không Tồn Tại!!!</text>
+}
+else
+{
+    <div class="panel panel-body" style="padding-top:unset">
+        <div class="row">
+            <div class="col-md-12" style="background-color:navy;color:white;font-size:18px;padding-top: 5px;padding-bottom: 5px;">
+                <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Chi Tiết Sản Phẩm
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-6" style="margin-top:10px;">
+                    <img src="~/Images/Imgs/sp/@Model.ProID/main.jpg" />
+                    <div class="soluong">Số Lượng: @Model.Quantity <i class="fa fa-eye" style="margin-left:20px;margin-right:10px;"></i> @Model.Viewer</div>
+                    <div class="giaban">Giá Bán: @string.Format("{0:#,#} VNĐ", Model.Price)</div>
+                    @if (Model.Quantity == 0)
+                   {
+                        <strong style="font-size:24px; color:orangered;">Hết Hàng</strong>
+                   }
+                   else if (UserContext.isLogin())
+                   {
+                         <form class="form-horizontal" id="cartAddForm" method="post" action="@Url.Action("Add","Cart")">
+                    <div class="form-group">
+                        <input type="hidden" name="proId" value="@Model.ProID" />
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input class="form-control" id="txtQ" type="text" value="1" name="quantity">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary mystyleAP" type="submit">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                </form>
+                   }
+                </div>
+                <div class="col-md-6" style="margin-top:10px;">
+                    <!-- horizontal tabs -->
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+                                <li class="active">
+                                    <a href="#home" data-toggle="tab">Mô Tả</a>
+                                </li>
+                                <li><a href="#profile" data-toggle="tab">Bình Luận</a></li>
+                                <li>
+                                    <a href="#messages" data-toggle="tab"><i class="fa fa-eye"></i> Lượt xem</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="my-tab-content" class="tab-content text-center"
+                         style="min-height:500px;">
+                        <div class="tab-pane active" id="home" style="font-size:medium;text-align:left!important;">
+                            <p>@Html.Raw(HttpUtility.HtmlDecode((Model.FullDes)))</p>
+                        </div>
+                        <div class="tab-pane" id="profile">
+                            @Html.Action("GetComent", "Comment", new { id = Model.ProID })
+                        </div>
+                        <div class="tab-pane" id="messages">
+                            <p>Here are your messages.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-12" style="background-color:navy;color:white;font-size:18px;padding-top: 5px;padding-bottom: 5px;">
+                <a href="javascript:void;" onclick="btnclick();" style="color:white;" title="Ẩn Đanh Sách">
+                    <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Sản Phẩm Cùng loại
+                </a>
+            </div>
+
+            <div class="col-md-12" id="Spe">
+                <div class="row" style="margin-top:10px;">
+                    @foreach (var item in ViewBag.PsamSpe)
+                    {
+                    <div class="col-xs-6 col-md-3">
+                        <a href="@Url.Action("Detail","Product",new { id = item.ProID})" class="thumbnail">
+                            <img src="~/Images/Imgs/sp/@item.ProID/main.jpg" alt="@item.ProName" title="@item.ProName">
+                        </a>
+                    </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-12" style="background-color:navy;color:white;font-size:18px;padding-top: 5px;padding-bottom: 5px;">
+                <a href="javascript:void;" onclick="btnclick2();" style="color:white;" title="Ẩn Đanh Sách">
+                    <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Sản Phẩm Cùng Nhà Sản Xuất
+                </a>
+            </div>
+
+            <div class="col-md-12" id="SPcat">
+                <div class="row" style="margin-top:10px;">
+                    @foreach (var item in ViewBag.PsameCat)
+                    {
+                        <div class="col-xs-6 col-md-3">
+                            <a href="@Url.Action("Detail","Product",new { id = item.ProID})" class="thumbnail">
+                                <img src="~/Images/Imgs/sp/@item.ProID/main.jpg" alt="@item.ProName" title="@item.ProName">
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

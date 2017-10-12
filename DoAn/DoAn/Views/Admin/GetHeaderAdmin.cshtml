@@ -1,0 +1,98 @@
+﻿<style type="text/css">
+    #iconbtn {
+        border: unset !important;
+        background-color: unset !important;
+        margin-top: 20px !important;
+    }
+
+    #strtexts {
+        margin-top: 10px !important;
+    }
+
+    #liinput {
+        min-width: 0px !important;
+        max-width: 500px !important;
+    }
+
+    #strSearch {
+        width: 350px !important;
+    }
+</style>
+<div class="container-fluid">
+    <div class="collapse navbar-collapse">
+        <form method="post" action="@Url.Action("search","Manager")" id="frmSeaching">
+            <ul class="nav navbar-nav navbar-left">
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;
+                        <p class="hidden-lg hidden-md">Dashboard</p>
+                    </a>
+                </li>
+                <li id="liinput">
+                    <div class="form-group" id="strtexts">
+
+                    </div>
+                </li>
+                <li id="formsearch">
+
+                </li>
+                <li style="margin-top:20px;">
+                    <i class="fa fa-search" id="btnsearch"></i>
+                </li>
+            </ul>
+        </form>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="@Url.Action("IndexAdmin","Admin")">
+                    <p>Quản Lý Đơn Hàng</p>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-globe"></i>
+                    <b class="caret hidden-sm hidden-xs"></b>
+                    <span class="notification hidden-sm hidden-xs">5</span>
+                    <p class="hidden-lg hidden-md">
+                        5 Notifications
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void;" role="button" onclick="btn_logout_click();">
+                    <p>Log out</p>
+                </a>
+            </li>
+            <li class="separator hidden-lg hidden-md"></li>
+        </ul>
+    </div>
+</div>
+<form method="post" action="@Url.Action("Logout","Header")" id="frmLogout"></form>
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    function btn_logout_click() {
+        document.getElementById('frmLogout').submit();
+    }
+
+    $('#btnsearch').on('click', function () {
+        $('#strtexts').html('<input type="text" id="strSearch" name="strSearch" class="form-control" />');
+        $('#formsearch').html('<button type="submit" id="iconbtn"><i class="fa fa-search" id="btnsearch"></i></button>');
+        $(this).hide();
+    });
+    $('#frmSeaching').submit(function (e) {
+        e.preventDefault();
+        if ($('#strSearch').val() != null && $('#strSearch').val() != '') {
+            $('#frmSeaching').submit();
+        }
+    });
+</script>

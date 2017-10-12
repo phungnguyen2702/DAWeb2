@@ -1,0 +1,142 @@
+﻿@model IEnumerable<DoAn.Models.Product>
+
+@{
+    ViewBag.Title = "GetProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string[] classBT = new string[] { "active", "success", "warning", "danger", "info" };
+    int istring = 0;
+}
+
+
+@section css{
+    <link href="~/Content/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="~/Content/ButtonStyle.css" rel="stylesheet" />
+}
+
+@section js{
+    <script src="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <script type="text/javascript">
+        $('.numberich').TouchSpin({
+            verticalbuttons: true,
+            min: 0,
+            max: 1000000000,
+        });
+
+        $('.numberich2').TouchSpin({
+            verticalbuttons: true,
+            min: 0,
+            max: 1000000000,
+            step:1000
+        });
+
+        $('.btnDelete').on('click', function () {
+            var id = $(this).data('proid');
+            $('#txtidt').val(id);
+            $('#fdetetP').submit();
+        });
+
+    </script>
+}
+
+<form method="post" action="@Url.Action("DeleteProduct","Admin")" id="fdetetP">
+   <input type="hidden" name="proid" id="txtidt"/>
+   <input type="hidden" name="pa" id="page" value="@ViewBag.CurentPage" />
+</form>
+
+<div class="panel panel-primary">
+    <div class="panel-body" style="padding:10px">
+
+        <div class="text-left" style="margin-left:10px; padding-bottom:10px;">
+            <a role="button" class="btn btn-info btn-round mystyleA text-center" href="@Url.Action("CreateProduct")"
+               id="btnadd">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                <b>Thêm Một Sản Phẩm</b>
+            </a>
+        </div>
+
+        <div class="text-center center-block" style="background-color:azure; height:50px;">
+            <label style="font-size:20px;color:blueviolet;line-height:50px;">
+                <b>Danh Sách Các Sản Phẩm Của @ViewBag.NameCat</b>
+            </label>
+        </div>
+        <div>
+
+            @if (Model.Count() == 0)
+            {
+                <text>
+                    <p class="text-primary text-center" style="font-size:24px; font-weight:bold;">
+                        Không Có Sản Phẩm
+                    </p>
+                </text>
+            }
+            else
+            {
+                <form action="@Url.Action("Remove","Admin")" method="post" id="adminRemove">
+                    <input type="hidden" id="txtproid" name="proid"/>
+                    <input type="hidden" id="txtproid" name="curpage" value="@ViewBag.CurentPage" />
+                </form>
+                <table id="fresh-table" class="table table-hover">
+                    <tr class="info" style="color:navy;">
+                        <th>Sản Phẩm</th>
+                        <th data-sortable="true">Tên Sản Phẩm</th>
+                        <th data-sortable="true" class="text-center">Số Lượng</th>
+                        <th data-sortable="true" class="text-center">Giá</th>
+                        <th class="text-center">Mô Tả</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="@classBT[istring % classBT.Length].ToString()">
+                            <td>
+                                <img src="~/Images/imgs/sp/@item.ProID/main.jpg"
+                                     alt="@item.ProName" style="width:150px;" />
+                            </td>
+                            <td>@item.ProName</td>
+                            <td width="150" class="text-center">
+                                @item.Quantity
+                            </td>
+                            <td class="text-center" width="150">
+                                @string.Format("{0:#,#} VNĐ", item.Price)
+                            </td>
+                            <td class="text-center">@Html.Raw(item.TinyDes)</td>
+                            <td class="text-right">
+                                <a class="btn btn-danger btn-xs btnDelete" href="javascript:;" role="button" title="Xóa"
+                                   data-proid="@item.ProID" >
+                                    <i class="fa fa-remove"></i>
+                                </a>
+                                <a role="button" class="btn btn-success btn-xs btnupdate" title="Cập Nhật"  href="@Url.Action("UpdateProduct",new { id=item.ProID})"
+                                   data-proid="@item.ProID">
+                                    <i class="fa fa-check"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        istring++;
+                    }
+                </table>
+            }
+        </div>
+    </div>
+
+    <div class="text-right">
+        @if (Model.Count() != 0)
+        {
+
+            <ul class="pagination pagination-info">
+                <li><a href="?page=1"><</a></li>
+                @for (int i = 1; i <= ViewBag.Pages; i++)
+                {
+                    if (i == ViewBag.CurentPage)
+                    {
+                        <li class="active"><a href="?page=@i">@i</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="?page=@i">@i</a></li>
+                    }
+                }
+                <li><a href="?page=@ViewBag.TotalPage">></a></li>
+            </ul>
+        }
+    </div>
+</div>

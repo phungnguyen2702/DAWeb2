@@ -1,0 +1,313 @@
+﻿@model DoAn.Models.Product
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section css{
+
+    <link href="~/Content/ButtonStyle.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="~/Content/Rerister/css/material-bootstrap-wizard.css" rel="stylesheet" />
+    <style type="text/css">
+        .labelForm {
+            font-size: 16px !important;
+            color: navy !important;
+            font-weight: bold !important;
+        }
+
+        div div label {
+            color: red !important;
+        }
+
+        .finput {
+            margin-top: 10px !important;
+        }
+
+        #wizardPicturePreview {
+            height: 150px !important;
+            margin-top: 50px !important;
+        }
+
+        #wizardPicturePreview2 {
+            height: 200px !important;
+            margin-top: 50px !important;
+        }
+
+        input[type="file"] {
+            opacity: 100 !important;
+            position: unset !important;
+            margin-top: 22px !important;
+        }
+
+        div {
+            margin-top: unset !important;
+        }
+
+        .btn-default {
+            color: unset !important;
+            background-color: #B052C0 !important;
+            margin-top: 5px !important;
+        }
+
+        #cat {
+            margin-top: 10px !important;
+        }
+
+        p a {
+            color: purple !important;
+        }
+    </style>
+}
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <div class="text-center center-block" style="background-color:azure; height:50px;">
+            <p style="font-size:20px;color:blueviolet;line-height:50px;">
+                <b>Chỉnh Sửa Thông Tin Sản Phẩm</b>
+            </p>
+        </div>
+        <form class="form-horizontal" method="post" enctype="multipart/form-data" action="@Url.Action("UpdateProduct","Admin")"
+              style="padding-right: 20px !important;" id="frmCreateProduct">
+            <div class="form-group" style="margin-top:20px !important;">
+                <label for="txtProName" class="control-label col-sm-2 labelForm">
+                    Sản Phẩm :
+                </label>
+                <input type="hidden" value="@Model.ProID" name="ProID"/>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="text" class="form-control finput" name="ProName"
+                               id="ProName" value="@Model.ProName"  />
+                    </div>
+                </div>
+
+                <label for="txtProName" class="control-label col-sm-2 labelForm">
+                    Danh Mục :
+                </label>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <select class="form-control" id="cat" name="CatID">
+                            <option value="">---Chọn Danh Mục---</option>
+                            @if (ViewBag.Cat != null)
+                            {
+                                foreach (var item in ViewBag.Cat)
+                                {
+                                    if (item.CatID == Model.CatID)
+                                    {
+                                        <option value="@item.CatID" selected>@item.CatName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.CatID">@item.CatName</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:20px !important;">
+                <label for="txtQuantity" class="control-label col-sm-2 labelForm">
+                    Số Lượng Tồn :
+                </label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control finput" name="Quantity"
+                           id="txtQuantity" value="@Model.Quantity" />
+                </div>
+
+                <label for="txtPrice" class="control-label col-sm-2 labelForm">
+                    Giá :
+                </label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control finput" name="Price"
+                           id="txtPrice" value="@((int)Model.Price)" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fumain" class="control-label col-sm-2 labelForm">
+                    Hình Lớn :
+                </label>
+
+                <div class="col-sm-4">
+                    <input type="file" id="wizard2" name="fPmain">
+                </div>
+
+                <label for="fPmainthums" class="control-label col-sm-2 labelForm">
+                    Hình Nhỏ :
+                </label>
+
+                <div class="col-sm-4">
+                    <input type="file" id="wizard-picture" name="fPmainthums">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-2">
+                    <div class="picture-container">
+                        <div class="picture">
+                            <img src="~/Images/Imgs/sp/@Model.ProID/main.jpg" class="picture-src" id="wizardPicturePreview2" title="" />
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4 col-sm-offset-2 ">
+                    <div class="picture-container">
+                        <div class="picture">
+                            <img src="~/Images/Imgs/sp/@Model.ProID/main_thumbs.jpg" class="picture-src" id="wizardPicturePreview" title="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:10px!important;">
+                <label for="txtTinyDes" class="control-label col-sm-2 labelForm">
+                    Mô Tả :
+                </label>
+                <div class="col-sm-10">
+                    <div class="form-group label-floating">
+                        @Html.Raw(Model.TinyDes)
+                        <input type="text" class="form-control" name="TinyDes"
+                               id="txtTinyDes" style="margin-top: 10px;" value=""/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2 labelForm">
+                    Mô Tả Đầy đủ
+                </label>
+                <div class="col-sm-10">
+                    @Html.Raw(HttpUtility.HtmlDecode((Model.FullDes)))
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <textarea class="form-control" id="txtFullDes" name="FullDes"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <button type="submit" class="btn btn-success" style="margin-left:50px;">
+                        <i class="fa fa-check-circle-o"></i>&nbsp;Lưu
+                    </button>
+                    <a role="button" class="btn btn-primary" style="margin-left:50px;"
+                       href="@Url.Action("GetProduct",new { id=Model.CatID})">
+                        <i class="fa fa-step-backward"></i>&nbsp;Quay Lại
+                    </a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section js{
+    <script src="~/Scripts/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <script src="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#txtFullDes',
+            menubar: false,
+            toolbar1: "styleselect | bold italic | link image | alignleft aligncenter alignright | bullist numberlist",
+            toolbar2: "fontselect | fontsizeselect | forecolor backcolor",
+            plugins: 'link image textcolor',
+            encoding: "xml",
+        });
+        $('#txtQuantity').TouchSpin({
+            verticalbuttons: false,
+            min: 0,
+            max: 100000000
+        });
+
+        $('#txtPrice').TouchSpin({
+            verticalbuttons: false,
+            min: 0,
+            step: 10000,
+            max: 10000000000,
+        });
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#wizardPicturePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        function readURL2(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#wizardPicturePreview2').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#wizard2").change(function () {
+            readURL2(this);
+        });
+
+        $("#wizard-picture").change(function () {
+            readURL(this);
+        });
+
+        $("#wizardPicturePreview2").on('click', function () {
+            $('#wizard2').click();
+        });
+
+        $("#wizardPicturePreview").on('click', function () {
+            $('#wizard-picture').click();
+        });
+
+        $('#frmCreateProduct').validate({
+            rules: {
+                ProName: {
+                    required: true
+                },
+                CatID: {
+                    required: true
+                },
+                Quantity: {
+                    required: true
+                },
+                Price: {
+                    required: true
+                }
+            },
+
+            messages: {
+                ProName: {
+                    required: "Vui Lòng Nhập Tên Sản Phẩm"
+                },
+                CatID: {
+                    required: "Vui Lòng Chọn Danh Mục Sản Phẩm"
+                },
+                Quantity: {
+                    required: "Nhập Số Lượng"
+                },
+                Price: {
+                    required: "Nhập Giá"
+                }
+            }
+        });
+
+
+
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<DoAn.Models.Category>
+
+<div class="sidebar-wrapper">
+    <div class="logo text-center" style="height:60px; padding-top:15px;">
+        <a class="text-center" style="font-weight:bold; color:white; font-size:20px;"
+            href="@Url.Action("IndexAdmin","Admin")">
+        <i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp; Dashboard</a> 
+    </div>
+    <ul class="nav">
+        @{
+            string[] icon = { "pe-7s-note2","pe-7s-phone", "pe-7s-gift", "pe-7s-like",
+                "pe-7s-news-paper", "pe-7s-display2","pe-7s-coffee"};
+            int i = 0;
+            foreach (var item in Model)
+            {
+                <li class="active">
+                    <a href="@Url.Action("GetProduct", "Admin", new { id = item.CatID })">
+                        <i class="@icon[i % icon.Length]"></i>
+                        <p>@item.CatName</p>
+                    </a>
+                </li>
+                i++;
+            }
+        }
+    </ul>
+
+    <div class="logo">
+    </div>
+
+    <ul class="nav">
+        <li class="active">
+            <a href="@Url.Action("AddCategory","Admin")">
+                <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+                <p>Thêm Danh Mục</p>
+            </a>
+        </li>
+
+        <li class="active">
+            <a href="@Url.Action("EditCategory","Admin")">
+                <i class="fa fa-edit fa-2x" aria-hidden="true"></i>
+                <p>Cập Nhật Danh Mục</p>
+            </a>
+        </li>
+    </ul>
+
+    <div class="logo">
+    </div>
+
+    <ul class="nav">
+        <li class="active">
+            <a href="@Url.Action("report","Manager")">
+                <i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i>
+                <p>Thống Kê Báo Cáo</p>
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="sidebar-background" style="background-image: url(/Content/img/sidebar-3.jpg) "></div>

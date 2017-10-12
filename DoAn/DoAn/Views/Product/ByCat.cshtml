@@ -1,0 +1,165 @@
+﻿@using DoAn.Helper
+@model IList<DoAn.Models.Product>
+
+@section css{
+    <link href="~/Content/material-kit.css" rel="stylesheet" />
+    <link href="~/Content/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="~/Content/lightbox2/css/lightbox.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .mystyleA {
+            background-color: deepskyblue !important;
+            color: white !important;
+        }
+
+            .mystyleA:hover {
+                box-shadow: 0px 14px 26px -12px rgba(0,188,212,0.42), 0px 4px 23px 0px rgba(0,0,0,0.12), 0px 8px 10px -5px rgba(0,188,212,0.2) !important;
+            }
+
+        .mystyleAP {
+            background-color: mediumblue !important;
+            color: white !important;
+        }
+
+            .mystyleAP:hover {
+                box-shadow: 0px 14px 26px -12px rgba(0,188,212,0.42), 0px 4px 23px 0px rgba(0,0,0,0.12), 0px 8px 10px -5px rgba(0,188,212,0.2) !important;
+            }
+    </style>
+}
+
+@section js{
+    <script src="~/Scripts/bootstrap-table.js"></script>
+    <script src="~/Content/lightbox2/js/lightbox.min.js"></script>
+    <script type="text/javascript">
+        $('.addItemCard').on('click', function () {
+            var ProID = $(this).data('id');
+            $('#txtIdProduct').val(ProID);
+            $('#AddToCart').submit();
+        });
+    </script>
+}
+
+
+<div class="panel panel-primary">
+    @*<div class="panel-heading">
+            <h3 class="panel-title text-center">Danh sách sản phẩm</h3>
+        </div>*@
+    <div class="panel-body" style="padding-top:unset;padding-bottom:unset">
+        <div class="row">
+            @if (ViewBag.CatN != null)
+            {
+                <div class="col-md-12" style="background-color:navy;color:white;font-size:18px;padding-top: 5px;padding-bottom: 5px;">
+                    <a href="javascript:void;" onclick="btnclick();" style="color:white;" title="Ẩn Đanh Sách">
+                        <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Danh Sách Sản Phẩm Của @ViewBag.CatN.CatName
+                    </a>
+                </div>
+            }
+            @if (ViewBag.Spe != null)
+            {
+                <div class="col-md-12" style="background-color:navy;color:white;font-size:18px;padding-top: 5px;padding-bottom: 5px;">
+                    <a href="javascript:void;" onclick="btnclick();" style="color:white;" title="Ẩn Đanh Sách">
+                        <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Danh Sách Sản Phẩm Thuộc @ViewBag.Spe.Specie
+                    </a>
+                </div>
+            }
+            @if (ViewBag.Stsearch != null)
+            {
+                <div class="col-md-12" style="background-color:navy;color:white;font-size:18px;padding-top: 5px;padding-bottom: 5px;">
+                    <a href="javascript:void;" onclick="btnclick();" style="color:white;" title="Ẩn Đanh Sách">
+                        <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Danh Sách Tìm Với Từ Khóa:&nbsp; @ViewBag.Stsearch
+                    </a>
+                </div>
+            }
+            @if (Model.Count() == 0)
+            {
+
+                <div>
+                    <div class="alert alert-default" style="color:orangered; font-weight:bold;">
+                        <div class="container">
+                            <div class="alert-icon">
+                                <h3>
+                                    <i class="pe-7s-folder fa-2x">
+                                        <b>Sản Phẩm Đang Được Cập Nhật</b>
+                                    </i>
+                                </h3>
+                            </div>                            
+                        </div>
+                    </div>
+                    <a class="btn btn-info btn-round" style="margin-left:20px;" role="button"
+                       href="@Url.Action("Index","Home")">Quay Lại Trang Chủ</a>
+                </div>
+
+            }
+            else
+            {
+                <form method="post" id="AddToCart" action="@Url.Action("AddIndex","Cart")">
+                    <input type="hidden" id="txtIdProduct" name="proId" value="" />
+                    <input type="hidden" id="txtQuantity" name="quantity" value="1" />
+                    <input type="hidden" id="txtQuantity" name="curpage" value="@ViewBag.CurentPage" />
+                </form>
+               <div class="col-md-12" style="margin-top:10px;">
+                   @foreach (var item in Model)
+                   {
+                   <div class="col-md-4">
+                       <div class="thumbnail">
+                           <a href="~/Images/imgs/sp/@item.ProID/main.jpg" data-lightbox="@item.ProID" data-title="@item.ProName">
+                               <img src="~/Images/imgs/sp/@item.ProID/main.jpg" alt="@item.ProName"
+                                    style="margin-top:20px !important;">
+                           </a>
+                           <div class="caption" style="margin:50px 0px 0px 0px !important;">
+                               <h6 style="color:blueviolet;">@item.ProName</h6>
+                               <h6 style="color:mediumblue">@String.Format("{0:#,#} VNĐ", item.Price)</h6>
+                               <p style="height:150px;margin-bottom:0px !important;">
+                                   @Html.Raw(item.TinyDes)
+                               </p>
+                               <p>
+                                   <a class="btn btn-info btn-round mystyleA" role="button"
+                                      href="@Url.Action("Detail","Product",new { id = item.ProID})">
+                                       <span class="pe-7s-magic-wand"></span>
+                                       <b> &nbsp;Chi Tiết</b>
+                                   </a>
+                                   @if (UserContext.isLogin())
+                                   {
+                                       <a href="javascript:;" class="btn btn-primary btn-round mystyleAP addItemCard" role="button"
+                                          data-id="@item.ProID">
+
+                                           <b>
+                                               <i class="fa fa-cart-plus">&nbsp;</i>
+                                               Đặt Hàng
+                                           </b>
+                                       </a>
+                                   }
+                               </p>
+                           </div>
+                       </div>
+                   </div>
+                   }
+               </div>
+            }
+        </div>
+       <div class="text-right">
+           @if (Model.Count() != 0)
+           {
+
+               <ul class="pagination pagination-info">
+                   <li><a href="?page=1"><</a></li>
+                   @for (int i = 1; i <= ViewBag.Pages; i++)
+                   {
+                       if (i == ViewBag.CurentPage)
+                       {
+                        <li class="active"><a href="?page=@i">@i</a></li>
+                       }
+                       else
+                       {
+                        <li><a href="?page=@i">@i</a></li>
+                       }
+                   }
+                   <li><a href="?page=@ViewBag.TotalPage">></a></li>
+               </ul>
+           }
+           @*<li><a href="#">2</a></li>
+           <li class="active"><a href="#">3</a></li>
+           <li><a href="#">4</a></li>
+           <li><a href="#">5</a></li>*@
+       </div>
+    </div>
+</div>

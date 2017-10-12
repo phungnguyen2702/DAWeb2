@@ -1,0 +1,149 @@
+﻿@using DoAn.Helper
+@model IList<CartItem>
+
+@section css{
+<link href="~/Content/material-kit.css" rel="stylesheet" />
+<link href="~/Content/fresh-bootstrap-table.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+<style type="text/css">
+    .mystyleA {
+        background-color: deepskyblue !important;
+        color: white !important;
+    }
+
+        .mystyleA:hover {
+            box-shadow: 0px 14px 26px -12px rgba(0,188,212,0.42), 0px 4px 23px 0px rgba(0,0,0,0.12), 0px 8px 10px -5px rgba(0,188,212,0.2) !important;
+        }
+
+    .mystyleAP {
+        background-color: mediumblue !important;
+        color: white !important;
+    }
+
+        .mystyleAP:hover {
+            box-shadow: 0px 14px 26px -12px rgba(0,188,212,0.42), 0px 4px 23px 0px rgba(0,0,0,0.12), 0px 8px 10px -5px rgba(0,188,212,0.2) !important;
+        }
+</style>
+}
+@section js{
+    <script src="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <script type="text/javascript">
+    $('.numberich').TouchSpin({
+        verticalbuttons: true,
+        min:1,
+    });
+
+    $('.removeItem').on('click', function () {
+        var id = $(this).data('proid');
+        $('#txtproID').val(id);
+        $('#frm').submit();
+    });
+
+    $('.updateItem').on('click', function () {
+        var id = $(this).data('proid');
+        $('#txtUproID').val(id);
+
+        var Q = $(this).closest('tr').find('.numberich').val();
+        $('#txtUQ').val(Q);
+
+        $('#frmU').submit();
+    });
+    </script>
+}
+<div class="panel panel-primary">
+    <div class="panel-body" style="padding:10px;">
+        <div class="text-center center-block" style="background-color:azure; height:50px;">
+            <label style="font-size:20px;color:blueviolet;line-height:50px;">Giỏ Hàng Của Bạn</label>
+        </div>
+        <div>
+
+            @if (Model.Count == 0)
+            {
+                <text><h3 class="text-center info-text">Không Có Sản Phẩm</h3></text>
+            }
+            else
+            {
+                <form id="frm" method="post" action="@Url.Action("Remove","Cart")">
+                    <input id="txtproID" type="hidden" name="proId" />
+                </form>
+
+                <form id="frmU" method="post" action="@Url.Action("Update","Cart")">
+                    <input id="txtUproID" type="hidden" name="proId" />
+                    <input id="txtUQ" type="hidden" name="quantity" />
+                </form>
+
+                double total = 0;
+                <table id="fresh-table" class="table table-hover">
+                    <tr class="info" style="color:navy!important;" >
+                        <th>Sản Phẩm</th>
+                        <th data-sortable="true">Tên Sản Phẩm</th>
+                        <th data-sortable="true" class="text-center">Số Lượng</th>
+                        <th data-sortable="true" class="text-center">Giá</th>
+                        <th class="text-center">Thành Tiền</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    @foreach (var item in Model)
+                {
+                        <tr>
+                            <td>
+                                <img src="~/Images/imgs/sp/@item.product.ProID/main.jpg"
+                                     alt="@item.product.ProName" style="width:150px;" />
+                            </td>
+                            <td>@item.product.ProName</td>
+                            <td width="150">
+                                <input class="form-control numberich" id="txtQ" type="text" value="@item.Quantity" width="100"
+                                       name="quantity">
+                            </td>
+                            <td class="text-center">@string.Format("{0:#,#} VNĐ", item.product.Price)</td>                            
+                            <td class="text-center">@string.Format("{0:#,#} VNĐ", (item.product.Price * item.Quantity))</td>
+                            <td class="text-right">
+                                <a class="btn btn-danger btn-xs removeItem" href="javascript:;" role="button" title="Xóa"
+                                   data-proid="@item.product.ProID">
+                                   <i class="fa fa-remove"></i>
+                                </a>
+                                <a class="btn btn-success btn-xs updateItem" href="javascript:;" role="button" title="Cập Nhật"
+                                   data-proid="@item.product.ProID">
+                                    <i class="fa fa-check"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        total += (double)item.product.Price * (double)item.Quantity;
+                    }
+                    <tr>
+                        <td />
+                        <td />
+                        <td />
+                        <td style="color:red;font-size:24px;">
+                            Tổng Tiền:
+                        </td>
+                        <td style="color:blueviolet;font-size:20px;">
+                        @string.Format("{0:#,#} VNĐ", total)
+                        </td>
+                        <td/>
+                    </tr>
+                </table>             
+                
+                <form id="checkout" method="post" action="@Url.Action("CheckOut","Cart")">
+                    <div style="float:right;">
+                        <div class="form-group" style="margin-bottom:20px; margin-right:100px;">
+                            <a class="btn btn-info btn-round mystyleA text-center" role="button"
+                               href="@Url.Action("Index","Home")">
+                                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                                <b>Tiếp Tục Mua Hàng</b>
+                            </a>
+                            <button class="btn btn-primary btn-round mystyleAP" style="margin-left:30px; margin-right:40px;"
+                                    type="submit">
+                                <i class="fa fa-btc" aria-hidden="true"></i>
+                                <b>Thanh Toán</b>
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+   
+</div>
+
+

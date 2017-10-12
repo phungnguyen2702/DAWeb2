@@ -1,0 +1,125 @@
+﻿@using DoAn.Helper;
+@model IEnumerable<OrderVM>
+@{
+    ViewBag.Title = "IndexAdmin";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string[] classBT = new string[] { "active", "success", "warning", "danger", "info" };
+    int istring = 0;
+}
+
+@section css{
+    <link href="~/Content/fresh-bootstrap-table.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-touchspin-master/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="~/Content/ButtonStyle.css" rel="stylesheet" />
+}
+
+@section js{
+  <script type="text/javascript">
+      $('.btn-del').on('click',function () {
+          var id = $(this).data('ido');
+          $('#idO').val(id);
+          $('#frmDO').submit();
+      });
+      $('.btn-AC').on('click',function () {
+          var id = $(this).data('ido');
+          $('#idA').val(id);
+          $('#frmAO').submit();
+      });
+  </script>
+}
+
+@if (Model.Count() == 0)
+            {
+    <text>
+        <p class="text-primary text-center" style="font-size:24px; font-weight:bold;">
+            Không Có Sản Phẩm
+        </p>
+    </text>
+}
+else
+{
+    <form id="frmDO" method="post" action="@Url.Action("RemoveOder","Manager")">
+         <input type="hidden" id="idO" name="idO"/>
+    </form>
+    <form id="frmAO" method="post" action="@Url.Action("Accept","Manager")">
+        <input type="hidden" id="idA" name="idA" />
+    </form>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="text-center center-block" style="background-color:azure; height:50px;">
+                <label style="font-size:20px;color:blueviolet;line-height:50px;">
+                    <b>Danh Sách Các Đơn Đặt Hàng Mới</b>
+                </label>
+            </div>
+
+            <div>
+                <table id="fresh-table" class="table table-hover">
+                    <tr class="info" style="color:navy;">
+                        <th>STT</th>
+                        <th data-sortable="true">Người Đặt Hàng</th>
+                        <th data-sortable="true" class="text-left">Email</th>
+                        <th data-sortable="true" class="text-left">Sản Phẩm</th>
+                        <th class="text-center">Tổng Giá</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    @foreach (var item in Model)
+                        {
+                            <tr class="@classBT[istring % classBT.Length].ToString()">
+                                <td>
+                                   @(istring + 1)
+                                </td>
+                                <td>@item.OrderedName</td>
+                                <td class="text-left">
+                                    @item.OrderedEmail
+                                </td>
+                                <td class="text-left">
+                                    @for(int i = 0; i< item.ProName.Count; i++)
+                                    {
+                                        <text>@string.Format("{0} - Số Lượng: {1}",item.ProName[i],item.QuanTity[i])<br/></text>
+                                    }
+                                </td>
+                                <td class="text-center">@string.Format("{0:#,#} VNĐ", item.Total)</td>
+                                <td class="text-right">
+                                    <a class="btn btn-danger btn-xs btn-del" href="javascript:;" role="button" title="Xóa" data-ido="@item.OrderID">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                    <a href="javascript:;" role="button" class="btn btn-success btn-xs btn-AC " title="Chấp Nhận" data-ido="@item.OrderID">
+                                        <i class="fa fa-check"></i>
+                                    </a>
+
+                                    <a href="@Url.Action("GetOrdered","Manager", new { id = item.OrderID})" role="button" class="btn btn-info btn-xs" title="Chi Tiết Đơn Hàng">
+                                        <i class="fa fa-info" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            istring++;
+                        }
+                </table>
+            </div>
+        </div>
+
+            <a href="@Url.Action("getallordered","Manager")"id ="btnadd" style="margin-left:20px;">
+                <i class="fa fa-amazon" aria-hidden="true"></i>
+                <b>Xem Các Đơn Hàng Đã Duyệt</b>
+            </a>
+
+        <div class="text-right">           
+            <ul class="pagination pagination-info">
+                <li><a href="?page=1"><</a></li>
+                @for (int i = 1; i <= ViewBag.Pages; i++)
+                {
+                    if (i == ViewBag.CurentPage)
+                    {
+                        <li class="active"><a href="?page=@i">@i</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="?page=@i">@i</a></li>
+                    }
+                }
+                <li><a href="?page=@ViewBag.TotalPage">></a></li>
+            </ul>
+        </div>
+    </div>
+}
+
